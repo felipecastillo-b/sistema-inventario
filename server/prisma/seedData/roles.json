@@ -1,0 +1,22 @@
+[
+    {
+        "roleId": 1,
+        "name": "Admin",
+        "description": "Administrator Rol"
+    },
+    {
+        "roleId": 2,
+        "name": "Manager",
+        "description": "Manager Rol"
+    },
+    {
+        "roleId": 3,
+        "name": "Employee",
+        "description": "Employee Rol"
+    },
+    {
+        "roleId": 4,
+        "name": "Viewer",
+        "description": "Viewer Rol"
+    }
+]

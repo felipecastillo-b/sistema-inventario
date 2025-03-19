@@ -1,0 +1,12 @@
+[
+    {
+        "statusId": 1,
+        "name": "Active",
+        "description": "Active User"
+    },
+    {
+        "statusId": 2,
+        "name": "Inactive",
+        "description": "Inactive User"
+    }
+]

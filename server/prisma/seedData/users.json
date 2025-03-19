@@ -1,0 +1,18 @@
+[
+    {
+        "userId": "3b0fd66b-a4d6-4d95-94e4-01940c99aedb",
+        "name": "Felipe Castillo",
+        "email": "test@test.com",
+        "password": "$2a$10$Lw8bDcstrdMzSxjmc1.26e0qdguP2/f2yl2XnP6UT3hEhhKLddXYi",
+        "roleId": 1,
+        "statusId": 1
+    },
+    {
+        "userId": "9e2895ae-4afe-4ff2-b3b3-be15cf1c82d6",
+        "name": "Chonka",
+        "email": "chonka@chonka.com",
+        "password": "$2a$10$Lw8bDcstrdMzSxjmc1.26e0qdguP2/f2yl2XnP6UT3hEhhKLddXYi",
+        "roleId": 3,
+        "statusId": 1
+    }
+]
