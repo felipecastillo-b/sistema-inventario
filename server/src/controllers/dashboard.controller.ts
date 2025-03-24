@@ -7,14 +7,14 @@ export const getDashboardMetrics = async ( req: Request, res: Response): Promise
         const salesSummary = await getSalesSummary();
         const purchaseSummary = await getPurchaseSummary();
         const expenseSummary = await getExpenseSummary();
-        const expenseByCategory = await getExpenseByCategory();
+        const expenseByCategorySummary = await getExpenseByCategory();
 
         res.json({
             popularProducts,
             salesSummary,
             purchaseSummary,
             expenseSummary,
-            expenseByCategory,
+            expenseByCategorySummary,
         })
     } catch (error) {
         console.error('Error get dashboard metrics', error);
