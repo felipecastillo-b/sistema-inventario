@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import testRoutes from './routes/test.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import productRoutes from './routes/product.routes';
+import clientRoutes from './routes/client.routes';
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use(cors());
 app.use('/test', testRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/products', productRoutes);
+app.use('/clients', clientRoutes);
 
 export default app;
