@@ -10,6 +10,7 @@ import productRoutes from './routes/product.routes';
 import clientRoutes from './routes/client.routes';
 import expenseRoutes from './routes/expense.routes';
 import statusRoutes from './routes/status.routes';
+import supplierRoutes from './routes/supplier.routes';
 
 const app = express();
 
@@ -30,5 +31,6 @@ app.use('/products', productRoutes);
 app.use('/clients', clientRoutes);
 app.use('/expenses', expenseRoutes);
 app.use('/status', statusRoutes);
+app.use('/supplier', supplierRoutes);
 
 export default app;
