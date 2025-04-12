@@ -61,15 +61,30 @@ export interface Client {
     email: string;
 }
 
+export interface Status {
+    statusId: number;
+    name: string;
+    description: string;
+}
+
+export interface NewStatus {
+    statusId: number;
+    name: string;
+    description: string;
+}
+
+
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status"],
     endpoints: (build) => ({
+        // Dashboard
         getDashboardMetrics: build.query<DashboardMetrics, void>({
             query: () => "/dashboard",
             providesTags: ["DashboardMetrics"]
         }),
+        // Products
         getProducts: build.query<Product[], string | void>({
             query: (search) => ({
                 url: "/products",
@@ -85,13 +100,36 @@ export const api = createApi({
             }),
             invalidatesTags: ["Products"]
         }),
+        // Clients
         getClients: build.query<Client[], void>({
             query: () => "/clients",
             providesTags: ["Clients"],
         }),
+        // Expenses
         getExpensesByCategory: build.query<ExpenseByCategorySummary[], void>({
             query: () => "/expenses",
             providesTags: ["Expenses"],
+        }),
+        // Status
+        getStatus: build.query<Status[], void>({
+            query: () => "/status",
+            providesTags: ["Status"],
+        }),
+        createStatus: build.mutation<Status, NewStatus>({
+            query: (newStatus) => ({
+                url: "/status",
+                method: "POST",
+                body: newStatus
+            }),
+            invalidatesTags: ["Status"]
+        }),
+        updateStatus: build.mutation<Status, Status>({
+            query: (updatedStatus) => ({
+                url: "/status",
+                method: "PUT",
+                body: updatedStatus,
+            }),
+            invalidatesTags: ["Status"],
         }),
     }),
 })
@@ -102,4 +140,7 @@ export const {
     useCreateProductMutation,
     useGetClientsQuery,
     useGetExpensesByCategoryQuery,
+    useGetStatusQuery,
+    useCreateStatusMutation,
+    useUpdateStatusMutation,
 } = api;
