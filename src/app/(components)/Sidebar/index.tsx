@@ -97,6 +97,12 @@ const Sidebar = () => {
                     label='Configuracion' 
                     isCollapsed={isSidebarCollapsed} 
                 />
+                <SidebarLink  
+                    href='/supplier' 
+                    icon={SlidersHorizontal} 
+                    label='Suppliers' 
+                    isCollapsed={isSidebarCollapsed} 
+                />
                 
             </div>
 

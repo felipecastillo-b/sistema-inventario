@@ -73,11 +73,27 @@ export interface NewStatus {
     description: string;
 }
 
+export interface Supplier {
+    supplierId: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+}
+
+export interface NewSupplier {
+    supplierId: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+}
+
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier"],
     endpoints: (build) => ({
         // Dashboard
         getDashboardMetrics: build.query<DashboardMetrics, void>({
@@ -131,6 +147,27 @@ export const api = createApi({
             }),
             invalidatesTags: ["Status"],
         }),
+        // Supplier
+        getSupplier: build.query<Supplier[], void>({
+            query: () => "/supplier",
+            providesTags: ["Supplier"],
+        }),
+        createSupplier: build.mutation<Supplier, NewSupplier>({
+            query: (newSupplier) => ({
+                url: "/supplier",
+                method: "POST",
+                body: newSupplier
+            }),
+            invalidatesTags: ["Supplier"]
+        }),
+        updateSupplier: build.mutation<Supplier, Supplier>({
+            query: (updatedSupplier) => ({
+                url: "/supplier",
+                method: "PUT",
+                body: updatedSupplier,
+            }),
+            invalidatesTags: ["Supplier"],
+        }),
     }),
 })
 
@@ -143,4 +180,7 @@ export const {
     useGetStatusQuery,
     useCreateStatusMutation,
     useUpdateStatusMutation,
+    useGetSupplierQuery,
+    useCreateSupplierMutation,
+    useUpdateSupplierMutation,
 } = api;
