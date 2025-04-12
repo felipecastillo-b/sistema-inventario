@@ -11,6 +11,11 @@ model Clients {
   clientId String @id
   name   String
   email  String
+  phone  String
+  address String
+  sales   Sales[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Users {
@@ -22,6 +27,8 @@ model Users {
   roleId Int
   status Status           @relation(fields: [statusId], references: [statusId])
   statusId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Roles {
@@ -32,14 +39,18 @@ model Roles {
 }
 
 model Status {
-  statusId    Int          @id @default(autoincrement())
+  statusId    Int          @id
   name        String       @unique
   description String?
   users       Users[]
+  products    Products[]
 }
 
 model Products {
   productId     String      @id
+  categoryId    String
+  supplierId    String
+  statusId      Int
   name          String
   price         Float
   rating        Float?
@@ -48,22 +59,49 @@ model Products {
   image_url     String?
   Sales         Sales[]
   Purchases     Purchases[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  category      Category @relation(fields: [categoryId], references: [categoryId])
+  supplier      Suppliers @relation(fields: [supplierId], references: [supplierId])
+  status        Status @relation(fields: [statusId], references: [statusId])
+}
+
+model Category {
+  categoryId    String    @id
+  name          String
+  description   String
+  Products      Products[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Suppliers {
+  supplierId    String    @id
+  name          String
+  email         String
+  phone         String
+  address       String
+  Products      Products[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Sales {
   saleId      String   @id
   productId   String
-  timestamp   DateTime
+  clientId    String
+  timestamp   DateTime @default(now())
   quantity    Int
   unitPrice   Float
   totalAmount Float
   product     Products @relation(fields: [productId], references: [productId])
+  client      Clients @relation(fields: [clientId], references: [clientId])
 }
 
 model Purchases {
   purchaseId String   @id
   productId  String
-  timestamp  DateTime
+  timestamp  DateTime @default(now())
   quantity   Int
   unitCost   Float
   totalCost  Float
@@ -72,37 +110,39 @@ model Purchases {
 
 model Expenses {
   expenseId String   @id
-  category  String
+  expenseByCategoryId String
+  description String
   amount    Float
-  timestamp DateTime
+  timestamp DateTime @default(now())
+  expenseByCategory ExpenseByCategory @relation(fields: [expenseByCategoryId], references: [expenseByCategoryId])
 }
 
 model SalesSummary {
   salesSummaryId   String   @id
   totalValue       Float
   changePercentage Float?
-  date             DateTime
+  date             DateTime @default(now())
 }
 
 model PurchaseSummary {
   purchaseSummaryId String   @id
   totalPurchased    Float
   changePercentage  Float?
-  date              DateTime
+  date              DateTime @default(now())
 }
 
 model ExpenseSummary {
   expenseSummaryId  String              @id
   totalExpenses     Float
-  date              DateTime
-  ExpenseByCategory ExpenseByCategory[]
+  changePercentage  Float?
+  date              DateTime @default(now())
 }
 
 model ExpenseByCategory {
   expenseByCategoryId String         @id
-  expenseSummaryId    String
-  category            String
-  amount              BigInt
-  date                DateTime
-  expenseSummary      ExpenseSummary @relation(fields: [expenseSummaryId], references: [expenseSummaryId])
+  name String
+  description String
+  Expenses  Expenses[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
