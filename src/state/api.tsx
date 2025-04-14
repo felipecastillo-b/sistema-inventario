@@ -59,6 +59,16 @@ export interface Client {
     clientId: string;
     name: string;
     email: string;
+    phone: string;
+    address: string;
+}
+
+export interface NewClient {
+    clientId: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
 }
 
 export interface Status {
@@ -161,6 +171,22 @@ export const api = createApi({
         getClients: build.query<Client[], void>({
             query: () => "/clients",
             providesTags: ["Clients"],
+        }),
+        createClient: build.mutation<Client, NewClient>({
+            query: (newClient) => ({
+                url: "/clients",
+                method: "POST",
+                body: newClient
+            }),
+            invalidatesTags: ["Clients"]
+        }),
+        updateClient: build.mutation<Client, Client>({
+            query: (updatedClient) => ({
+                url: "/clients",
+                method: "PUT",
+                body: updatedClient,
+            }),
+            invalidatesTags: ["Clients"],
         }),
         // Expenses
         getExpensesByCategory: build.query<ExpenseByCategorySummary[], void>({
@@ -280,6 +306,8 @@ export const {
     useGetProductsQuery, 
     useCreateProductMutation,
     useGetClientsQuery,
+    useCreateClientMutation,
+    useUpdateClientMutation,
     useGetExpensesByCategoryQuery,
     useGetStatusQuery,
     useCreateStatusMutation,
