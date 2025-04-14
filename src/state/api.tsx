@@ -89,11 +89,22 @@ export interface NewSupplier {
     address: string;
 }
 
+export interface Category {
+    categoryId: string,
+    name: string,
+    description: string,
+}
+
+export interface NewCategory {
+    categoryId: string,
+    name: string,
+    description: string,
+}
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category"],
     endpoints: (build) => ({
         // Dashboard
         getDashboardMetrics: build.query<DashboardMetrics, void>({
@@ -168,6 +179,27 @@ export const api = createApi({
             }),
             invalidatesTags: ["Supplier"],
         }),
+        // Category
+        getCategory: build.query<Category[], void>({
+            query: () => "/category",
+            providesTags: ["Category"],
+        }),
+        createCategory: build.mutation<Category, NewCategory>({
+            query: (newCategory) => ({
+                url: "/category",
+                method: "POST",
+                body: newCategory
+            }),
+            invalidatesTags: ["Category"]
+        }),
+        updateCategory: build.mutation<Category, Category>({
+            query: (updatedCategory) => ({
+                url: "/category",
+                method: "PUT",
+                body: updatedCategory,
+            }),
+            invalidatesTags: ["Category"],
+        }),
     }),
 })
 
@@ -183,4 +215,7 @@ export const {
     useGetSupplierQuery,
     useCreateSupplierMutation,
     useUpdateSupplierMutation,
+    useGetCategoryQuery,
+    useCreateCategoryMutation,
+    useUpdateCategoryMutation,
 } = api;
