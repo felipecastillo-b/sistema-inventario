@@ -101,10 +101,22 @@ export interface NewCategory {
     description: string,
 }
 
+export interface Role {
+    roleId: number,
+    name: string,
+    description: string,
+}
+
+export interface NewRole {
+    roleId: number,
+    name: string,
+    description: string,
+}
+
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category", "Role"],
     endpoints: (build) => ({
         // Dashboard
         getDashboardMetrics: build.query<DashboardMetrics, void>({
@@ -200,6 +212,27 @@ export const api = createApi({
             }),
             invalidatesTags: ["Category"],
         }),
+        // Role
+        getRole: build.query<Role[], void>({
+            query: () => "/role",
+            providesTags: ["Role"],
+        }),
+        createRole: build.mutation<Role, NewRole>({
+            query: (newRole) => ({
+                url: "/role",
+                method: "POST",
+                body: newRole
+            }),
+            invalidatesTags: ["Role"]
+        }),
+        updateRole: build.mutation<Role, Role>({
+            query: (updatedRole) => ({
+                url: "/role",
+                method: "PUT",
+                body: updatedRole,
+            }),
+            invalidatesTags: ["Role"],
+        }),
     }),
 })
 
@@ -218,4 +251,7 @@ export const {
     useGetCategoryQuery,
     useCreateCategoryMutation,
     useUpdateCategoryMutation,
+    useGetRoleQuery,
+    useCreateRoleMutation,
+    useUpdateRoleMutation,
 } = api;
