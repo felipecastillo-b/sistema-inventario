@@ -113,10 +113,28 @@ export interface NewRole {
     description: string,
 }
 
+export interface User {
+    userId: string,
+    name: string,
+    email: string,
+    password: string,
+    roleId: number,
+    statusId: number,
+}
+
+export interface NewUser {
+    userId: string,
+    name: string,
+    email: string,
+    password: string,
+    roleId: number,
+    statusId: number,
+}
+
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category", "Role"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category", "Role", "User"],
     endpoints: (build) => ({
         // Dashboard
         getDashboardMetrics: build.query<DashboardMetrics, void>({
@@ -233,6 +251,27 @@ export const api = createApi({
             }),
             invalidatesTags: ["Role"],
         }),
+        // User
+        getUser: build.query<User[], void>({
+            query: () => "/user",
+            providesTags: ["User"],
+        }),
+        createUser: build.mutation<User, NewUser>({
+            query: (newUser) => ({
+                url: "/user",
+                method: "POST",
+                body: newUser
+            }),
+            invalidatesTags: ["User"]
+        }),
+        updateUser: build.mutation<User, User>({
+            query: (updatedUser) => ({
+                url: "/user",
+                method: "PUT",
+                body: updatedUser,
+            }),
+            invalidatesTags: ["User"],
+        }),
     }),
 })
 
@@ -254,4 +293,7 @@ export const {
     useGetRoleQuery,
     useCreateRoleMutation,
     useUpdateRoleMutation,
+    useGetUserQuery,
+    useCreateUserMutation,
+    useUpdateUserMutation,
 } = api;
