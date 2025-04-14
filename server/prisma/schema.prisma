@@ -10,7 +10,7 @@ datasource db {
 model Clients {
   clientId String @id
   name   String
-  email  String
+  email  String @unique
   phone  String
   address String
   sales   Sales[]
@@ -21,7 +21,7 @@ model Clients {
 model Users {
   userId String @id
   name   String
-  email  String
+  email  String @unique
   password String
   role   Roles            @relation(fields: [roleId], references: [roleId])
   roleId Int
@@ -78,7 +78,7 @@ model Category {
 model Suppliers {
   supplierId    String    @id
   name          String
-  email         String
+  email         String    @unique
   phone         String
   address       String
   Products      Products[]
