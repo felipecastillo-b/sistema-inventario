@@ -5,13 +5,14 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import testRoutes from './routes/test.routes';
-import dashboardRoutes from './routes/dashboard.routes';
+/*import dashboardRoutes from './routes/dashboard.routes';
 import productRoutes from './routes/product.routes';
 import clientRoutes from './routes/client.routes';
-import expenseRoutes from './routes/expense.routes';
+import expenseRoutes from './routes/expense.routes';*/
 import statusRoutes from './routes/status.routes';
 import supplierRoutes from './routes/supplier.routes';
 import categoryRoutes from './routes/category.routes';
+import roleRoutes from './routes/role.routes';
 
 const app = express();
 
@@ -27,12 +28,13 @@ app.use(cors());
 
 // Routes
 app.use('/test', testRoutes);
-app.use('/dashboard', dashboardRoutes);
+/*app.use('/dashboard', dashboardRoutes);
 app.use('/products', productRoutes);
 app.use('/clients', clientRoutes);
-app.use('/expenses', expenseRoutes);
+app.use('/expenses', expenseRoutes);*/
 app.use('/status', statusRoutes);
 app.use('/supplier', supplierRoutes);
 app.use('/category', categoryRoutes);
+app.use('/role', roleRoutes);
 
 export default app;
