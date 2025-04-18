@@ -1,4 +1,4 @@
-import prisma from "../configs/prisma.config";
+/*import prisma from "../configs/prisma.config";
 
 export const getExpensesByCategoryService = async () => {
     return await prisma.expenseByCategory.findMany(
@@ -8,4 +8,4 @@ export const getExpensesByCategoryService = async () => {
             },
         }
     );
-}
+}*/

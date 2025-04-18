@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+/*import { Request, Response } from "express";
 import { getExpenseByCategory, getExpenseSummary, getPopularProducts, getPurchaseSummary, getSalesSummary } from "../services/dashboard.service";
 
 export const getDashboardMetrics = async ( req: Request, res: Response): Promise<void> => {
@@ -20,4 +20,4 @@ export const getDashboardMetrics = async ( req: Request, res: Response): Promise
         console.error('Error get dashboard metrics', error);
         res.status(500).json({ error: 'Error get dashboard metrics' });
     }
-}
+}*/

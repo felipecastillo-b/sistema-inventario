@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+/*import { Request, Response } from "express";
 import { getExpensesByCategoryService } from "../services/expense.service";
 
 export const getExpensesByCategory = async ( req: Request, res: Response ): Promise<void> => {
@@ -17,4 +17,4 @@ export const getExpensesByCategory = async ( req: Request, res: Response ): Prom
         console.log('Error get expenses by category summary', error);
         res.status(500).json({ error: 'Error get expenses by category summary' });
     }
-}
+}*/

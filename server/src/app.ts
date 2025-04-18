@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import testRoutes from './routes/test.routes';
 //import dashboardRoutes from './routes/dashboard.routes';
-//import productRoutes from './routes/product.routes';
+import productRoutes from './routes/product.routes';
 import clientRoutes from './routes/client.routes';
 //import expenseRoutes from './routes/expense.routes';
 import statusRoutes from './routes/status.routes';
@@ -30,7 +30,7 @@ app.use(cors());
 // Routes
 app.use('/test', testRoutes);
 //app.use('/dashboard', dashboardRoutes);
-//app.use('/products', productRoutes);
+app.use('/products', productRoutes);
 app.use('/clients', clientRoutes);
 //app.use('/expenses', expenseRoutes);
 app.use('/status', statusRoutes);

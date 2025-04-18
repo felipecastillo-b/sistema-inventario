@@ -1,4 +1,4 @@
-import prisma from "../configs/prisma.config";
+/*import prisma from "../configs/prisma.config";
 
 export const getPopularProducts = async () => {
     return await prisma.products.findMany({
@@ -51,4 +51,4 @@ export const getExpenseByCategory = async () => {
         ...item,
         amount: item.amount.toString(),
     }))
-}
+}*/
