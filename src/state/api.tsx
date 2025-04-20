@@ -39,6 +39,23 @@ export interface PurchaseSummary {
     date: string;
 }
 
+export interface Purchase {
+    purchaseId: string,
+    productId: string,
+    quantity: number,
+    unitCost: number,
+    totalCost: number,
+    timestamp: string,
+}
+
+export interface NewPurchase {
+    purchaseId: string,
+    productId: string,
+    quantity: number,
+    unitCost: number,
+    totalCost: number,
+}
+
 export interface ExpenseSummary {
     expenseSummaryId: string;
     totalExpenses: number;
@@ -150,7 +167,7 @@ export interface NewUser {
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category", "Role", "User"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category", "Role", "User", "Purchase"],
     endpoints: (build) => ({
         // Dashboard
         getDashboardMetrics: build.query<DashboardMetrics, void>({
@@ -312,6 +329,19 @@ export const api = createApi({
             }),
             invalidatesTags: ["User"],
         }),
+        // Purchase
+        getPurchases: build.query<Purchase[], string | void>({
+            query: () => "/finances/purchases",
+            providesTags: ["Purchase"],
+        }),
+        createPurchase: build.mutation<Purchase, NewPurchase>({
+            query: (newPurchase) => ({
+                url: "/finances/purchases",
+                method: "POST",
+                body: newPurchase
+            }),
+            invalidatesTags: ["Purchase", "Products"]
+        }),
     }),
 })
 
@@ -339,4 +369,6 @@ export const {
     useGetUserQuery,
     useCreateUserMutation,
     useUpdateUserMutation,
+    useGetPurchasesQuery,
+    useCreatePurchaseMutation,
 } = api;
