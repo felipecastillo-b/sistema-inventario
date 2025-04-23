@@ -47,6 +47,7 @@ const Finances = () => {
                             </button>
                             <button
                                 className="mt-4 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                                onClick={() => router.push('/finances/sales')}
                             >
                                 Go Sales History
                             </button>
