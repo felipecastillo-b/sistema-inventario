@@ -124,3 +124,50 @@ export const createSaleService = async (
         };
     });
 };
+
+// Expense Category
+
+export const getExpenseByCategoryService = async () => {
+    return await prisma.expenseByCategory.findMany();
+};
+
+export const createExpenseByCategoryService = async (expenseByCategoryId: string, name: string, description: string) => {
+    return await prisma.expenseByCategory.create({
+        data: {
+            expenseByCategoryId,
+            name,
+            description,
+        },
+    });
+};
+
+// Expenses
+
+export const getExpensesService = async () => {
+    return await prisma.expenses.findMany({
+        include: {
+            expenseByCategory: true,
+        }
+    });
+};
+
+export const createExpenseService = async (expenseId: string, expenseByCategoryId: string, description: string, amount: number) => {
+    // Verificar que la relacion exista antes de crear
+    const [expenseByCategory] = await Promise.all([
+        prisma.expenseByCategory.findUnique({ where: { expenseByCategoryId } }),
+    ]);
+
+    if (!expenseByCategory) throw new Error(`Category with ID ${expenseByCategoryId} not found`);
+
+    return await prisma.expenses.create({
+        data: {
+            expenseId,
+            expenseByCategory: { connect: { expenseByCategoryId } },
+            description,
+            amount,
+        },
+        include: {
+            expenseByCategory: true,
+        }
+    });
+};

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createPurchaseService, createSaleService, getPurchasesService, getSalesService } from "../services/finances.service";
+import { createExpenseByCategoryService, createExpenseService, createPurchaseService, createSaleService, getExpenseByCategoryService, getExpensesService, getPurchasesService, getSalesService } from "../services/finances.service";
 
 // Purchases
 
@@ -50,5 +50,57 @@ export const createSale = async ( req: Request, res: Response ): Promise<void> =
     } catch (error) {
         console.error('Error create sale', error);
         res.status(500).json({ error: 'Error create sale' });
+    }
+};
+
+// Expense Category
+
+export const getExpenseByCategory = async ( req: Request, res: Response ): Promise<void> => {
+    try {
+        const expenseByCategory = await getExpenseByCategoryService();
+
+        res.json(
+            expenseByCategory
+        )
+    } catch (error) {
+        console.error('Error get Expenses Category', error);
+        res.status(500).json({ error: 'Error get Expenses Category' });
+    }
+}
+
+export const createExpenseByCategory = async ( req: Request, res: Response ): Promise<void> => {
+    try {
+        const { expenseByCategoryId, name, description } = req.body;
+        const expenseByCategory = await createExpenseByCategoryService(expenseByCategoryId, name, description);
+        res.status(201).json(expenseByCategory);
+    } catch (error) {
+        console.error('Error create Expenses Category', error);
+        res.status(500).json({ error: 'Error create Expenses Category' });
+    }
+};
+
+// Expenses
+
+export const getExpenses = async ( req: Request, res: Response ): Promise<void> => {
+    try {
+        const expenses = await getExpensesService();
+
+        res.json(
+            expenses
+        )
+    } catch (error) {
+        console.error('Error get expenses', error);
+        res.status(500).json({ error: 'Error get expenses' });
+    }
+}
+
+export const createExpense = async ( req: Request, res: Response ): Promise<void> => {
+    try {
+        const { expenseId, expenseByCategoryId, description, amount } = req.body;
+        const expense = await createExpenseService(expenseId, expenseByCategoryId, description, amount);
+        res.status(201).json(expense);
+    } catch (error) {
+        console.error('Error create expense', error);
+        res.status(500).json({ error: 'Error create expense' });
     }
 };
