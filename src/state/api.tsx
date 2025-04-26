@@ -25,13 +25,6 @@ export interface NewProduct {
     image_url?: string;
 }
 
-export interface SalesSummary {
-    salesSummaryId: string;
-    totalValue: number;
-    changePercentage?: number;
-    date: string;
-}
-
 export interface Sale {
     saleId: string,
     productId: string,
@@ -51,13 +44,6 @@ export interface NewSale {
     totalAmount: number,
 }
 
-export interface PurchaseSummary {
-    purchaseSummaryId: string;
-    totalPurchased: number;
-    changePercentage?: number;
-    date: string;
-}
-
 export interface Purchase {
     purchaseId: string,
     productId: string,
@@ -75,26 +61,36 @@ export interface NewPurchase {
     totalCost: number,
 }
 
-export interface ExpenseSummary {
-    expenseSummaryId: string;
-    totalExpenses: number;
-    date: string;
+export interface ExpenseByCategory {
+    expenseByCategoryId: string;
+    name: string;
+    description: string;
+    createdAt: string;
 }
 
-export interface ExpenseByCategorySummary {
+export interface NewExpenseByCategory {
     expenseByCategoryId: string;
-    //expenseSummaryId: string;
-    category: string;
-    amount: string;
-    date: string;
+    name: string;
+    description: string;
+}
+
+export interface Expense {
+    expenseId: string,
+    expenseByCategoryId: string,
+    description: string,
+    amount: number,
+    timestamp: string,
+}
+
+export interface NewExpense {
+    expenseId: string,
+    expenseByCategoryId: string,
+    description: string,
+    amount: number,
 }
 
 export interface DashboardMetrics {
     popularProducts: Product[];
-    salesSummary: SalesSummary[];
-    purchaseSummary: PurchaseSummary[];
-    expenseSummary: ExpenseSummary[];
-    expenseByCategorySummary: ExpenseByCategorySummary[];
 }
 
 export interface Client {
@@ -186,13 +182,13 @@ export interface NewUser {
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Expenses", "Status", "Supplier", "Category", "Role", "User", "Purchase", "Sale"],
+    tagTypes: ["DashboardMetrics", "Products", "Clients", "Status", "Supplier", "Category", "Role", "User", "Purchase", "Sale", "ExpenseByCategory", "Expense"],
     endpoints: (build) => ({
         // Dashboard
-        getDashboardMetrics: build.query<DashboardMetrics, void>({
-            query: () => "/dashboard",
-            providesTags: ["DashboardMetrics"]
-        }),
+//        getDashboardMetrics: build.query<DashboardMetrics, void>({
+//            query: () => "/dashboard",
+//            providesTags: ["DashboardMetrics"]
+//        }),
         // Products
         getProducts: build.query<Product[], string | void>({
             query: (search) => ({
@@ -237,11 +233,6 @@ export const api = createApi({
                 body: updatedClient,
             }),
             invalidatesTags: ["Clients"],
-        }),
-        // Expenses
-        getExpensesByCategory: build.query<ExpenseByCategorySummary[], void>({
-            query: () => "/expenses",
-            providesTags: ["Expenses"],
         }),
         // Status
         getStatus: build.query<Status[], void>({
@@ -374,18 +365,43 @@ export const api = createApi({
             }),
             invalidatesTags: ["Sale", "Products"]
         }),
+        // Expense Category
+        getExpenseByCategory: build.query<ExpenseByCategory[], string | void>({
+            query: () => "/finances/expense-category",
+            providesTags: ["ExpenseByCategory"],
+        }),
+        createExpenseByCategory: build.mutation<ExpenseByCategory, NewExpenseByCategory>({
+            query: (newExpenseByCategory) => ({
+                url: "/finances/expense-category",
+                method: "POST",
+                body: newExpenseByCategory
+            }),
+            invalidatesTags: ["ExpenseByCategory"]
+        }),
+        // Expense
+        getExpenses: build.query<Expense[], string | void>({
+            query: () => "/finances/expenses",
+            providesTags: ["Expense"],
+        }),
+        createExpense: build.mutation<Expense, NewExpense>({
+            query: (newExpense) => ({
+                url: "/finances/expenses",
+                method: "POST",
+                body: newExpense
+            }),
+            invalidatesTags: ["Expense"]
+        }),
     }),
 })
 
 export const { 
-    useGetDashboardMetricsQuery, 
+    //useGetDashboardMetricsQuery, 
     useGetProductsQuery, 
     useCreateProductMutation,
     useUpdateProductMutation,
     useGetClientsQuery,
     useCreateClientMutation,
     useUpdateClientMutation,
-    useGetExpensesByCategoryQuery,
     useGetStatusQuery,
     useCreateStatusMutation,
     useUpdateStatusMutation,
@@ -405,4 +421,8 @@ export const {
     useCreatePurchaseMutation,
     useGetSalesQuery,
     useCreateSaleMutation,
+    useGetExpenseByCategoryQuery,
+    useCreateExpenseByCategoryMutation,
+    useGetExpensesQuery,
+    useCreateExpenseMutation,
 } = api;
