@@ -15,6 +15,7 @@ import categoryRoutes from './routes/category.routes';
 import roleRoutes from './routes/role.routes';
 import userRoutes from './routes/user.routes';
 import financeRoutes from './routes/finances.routes';
+import authRoutes from './routes/auth.routes';
 
 const app = express();
 
@@ -40,5 +41,6 @@ app.use('/category', categoryRoutes);
 app.use('/role', roleRoutes);
 app.use('/user', userRoutes);
 app.use('/finances', financeRoutes);
+app.use('/auth', authRoutes);
 
 export default app;
