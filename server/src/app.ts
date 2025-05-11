@@ -39,7 +39,7 @@ app.use('/status', statusRoutes);
 app.use('/supplier', supplierRoutes);
 app.use('/category', categoryRoutes);
 app.use('/role', roleRoutes);
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 app.use('/finances', financeRoutes);
 app.use('/auth', authRoutes);
 
