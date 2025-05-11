@@ -320,12 +320,12 @@ export const api = createApi({
         }),
         // User
         getUser: build.query<User[], void>({
-            query: () => "/user",
+            query: () => "/users",
             providesTags: ["User"],
         }),
         createUser: build.mutation<User, NewUser>({
             query: (newUser) => ({
-                url: "/user",
+                url: "/users",
                 method: "POST",
                 body: newUser
             }),
@@ -333,7 +333,7 @@ export const api = createApi({
         }),
         updateUser: build.mutation<User, User>({
             query: (updatedUser) => ({
-                url: "/user",
+                url: "/users",
                 method: "PUT",
                 body: updatedUser,
             }),
@@ -391,6 +391,13 @@ export const api = createApi({
             }),
             invalidatesTags: ["Expense"]
         }),
+        login: build.mutation<{ token: string}, { email: string; password: string }>({
+            query: (credentials) => ({
+                url: "/auth/login",
+                method: "POST",
+                body: credentials,
+            }),
+        }),
     }),
 })
 
@@ -425,4 +432,5 @@ export const {
     useCreateExpenseByCategoryMutation,
     useGetExpensesQuery,
     useCreateExpenseMutation,
+    useLoginMutation,
 } = api;

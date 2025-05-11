@@ -7,6 +7,7 @@ import Header from "../(components)/Header";
 import CreateClientModal from "./CreateClientModal";
 import UpdateClientModal from "./UpdateClientModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import ProtectedRoute from "../(components)/ProtectedRoute";
 
 type ClientFormData = {
     clientId: string;
@@ -70,56 +71,58 @@ const Clients = () => {
     };
 
     return (
-        <div className="mx-auto pb-5 w-full">
+        <ProtectedRoute>
+            <div className="mx-auto pb-5 w-full">
 
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <Header name="Client"/>
-                <button 
-                    className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
-                    Create Client
-                </button>
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
+                    <Header name="Client"/>
+                    <button 
+                        className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
+                        Create Client
+                    </button>
+                </div>
+
+                {/* Client List */}
+                <div className="flex flex-col">
+                        <DataGrid 
+                            rows={client} 
+                            columns={columns} 
+                            getRowId={(row) => row.clientId} 
+                            checkboxSelection
+                            initialState={{
+                                sorting: {
+                                    sortModel: [{ field: 'name', sort: 'asc' }],
+                                }
+                            }}
+                            className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
+                            [&_.MuiTablePagination-root]:!text-gray-700
+                            [&_.MuiButtonBase-root]:!text-gray-700
+                            [&_.MuiDataGrid-columnHeader]:bg-white
+                            [&_.MuiDataGrid-filler]:bg-white
+                            [&_.MuiSvgIcon-root]:!text-gray-700
+                            "
+                        />
+                </div>
+
+                {/* Modal */}
+                <CreateClientModal 
+                    isOpen={isModalOpen} 
+                    onClose={() => setIsModalOpen(false)} 
+                    onCreate={handleCreateClient}
+                />
+
+                <UpdateClientModal
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    onUpdate={handleUpdateClient}
+                    initialData={selectedClient}
+                />
             </div>
-
-            {/* Client List */}
-            <div className="flex flex-col">
-                    <DataGrid 
-                        rows={client} 
-                        columns={columns} 
-                        getRowId={(row) => row.clientId} 
-                        checkboxSelection
-                        initialState={{
-                            sorting: {
-                                sortModel: [{ field: 'name', sort: 'asc' }],
-                            }
-                        }}
-                        className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
-                        [&_.MuiTablePagination-root]:!text-gray-700
-                        [&_.MuiButtonBase-root]:!text-gray-700
-                        [&_.MuiDataGrid-columnHeader]:bg-white
-                        [&_.MuiDataGrid-filler]:bg-white
-                        [&_.MuiSvgIcon-root]:!text-gray-700
-                        "
-                    />
-            </div>
-
-            {/* Modal */}
-            <CreateClientModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onCreate={handleCreateClient}
-            />
-
-            <UpdateClientModal
-                isOpen={isUpdateModalOpen}
-                onClose={() => setIsUpdateModalOpen(false)}
-                onUpdate={handleUpdateClient}
-                initialData={selectedClient}
-            />
-        </div>
+        </ProtectedRoute>
     )
 };
 

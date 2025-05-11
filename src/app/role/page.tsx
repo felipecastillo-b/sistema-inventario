@@ -7,6 +7,9 @@ import Header from "../(components)/Header";
 import CreateRoleModal from "./CreateRoleModal";
 import UpdateRoleModal from "./UpdateRoleModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import ProtectedRoute from "../(components)/ProtectedRoute";
+import Unauthorized from "../(components)/Unauthorized";
+import { useUserRole } from "@/hooks/useUserRole";
 
 type RoleFormData = {
     roleId: number;
@@ -21,6 +24,7 @@ const Role = () => {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState<RoleFormData | null>(null);
     const [updateRole] = useUpdateRoleMutation();
+    const roleId = useUserRole();
 
     const handleCreateRole = async (roleData: RoleFormData) => {
         await createRole(roleData);
@@ -65,57 +69,62 @@ const Role = () => {
         );
     };
 
+    if (roleId === null) return <div className="py-4">Cargando...</div>;
+    if (roleId !== 1) return <Unauthorized />;
+
     return (
-        <div className="mx-auto pb-5 w-full">
+        <ProtectedRoute>
+            <div className="mx-auto pb-5 w-full">
 
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <Header name="Role"/>
-                <button 
-                    className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
-                    Create Role
-                </button>
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
+                    <Header name="Role"/>
+                    <button 
+                        className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
+                        Create Role
+                    </button>
+                </div>
+
+                {/* Role List */}
+                <div className="flex flex-col">
+                        <DataGrid 
+                            rows={role} 
+                            columns={columns} 
+                            getRowId={(row) => row.roleId} 
+                            checkboxSelection
+                            initialState={{
+                                sorting: {
+                                    sortModel: [{ field: 'roleId', sort: 'asc' }],
+                                }
+                            }}
+                            className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
+                            [&_.MuiTablePagination-root]:!text-gray-700
+                            [&_.MuiButtonBase-root]:!text-gray-700
+                            [&_.MuiDataGrid-columnHeader]:bg-white
+                            [&_.MuiDataGrid-filler]:bg-white
+                            [&_.MuiSvgIcon-root]:!text-gray-700
+                            "
+                        />
+                </div>
+
+                {/* Modal */}
+                <CreateRoleModal 
+                    isOpen={isModalOpen} 
+                    onClose={() => setIsModalOpen(false)} 
+                    onCreate={handleCreateRole}
+                />
+
+                <UpdateRoleModal
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    onUpdate={handleUpdateRole}
+                    initialData={selectedRole}
+                />
             </div>
-
-            {/* Role List */}
-            <div className="flex flex-col">
-                    <DataGrid 
-                        rows={role} 
-                        columns={columns} 
-                        getRowId={(row) => row.roleId} 
-                        checkboxSelection
-                        initialState={{
-                            sorting: {
-                                sortModel: [{ field: 'roleId', sort: 'asc' }],
-                            }
-                        }}
-                        className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
-                        [&_.MuiTablePagination-root]:!text-gray-700
-                        [&_.MuiButtonBase-root]:!text-gray-700
-                        [&_.MuiDataGrid-columnHeader]:bg-white
-                        [&_.MuiDataGrid-filler]:bg-white
-                        [&_.MuiSvgIcon-root]:!text-gray-700
-                        "
-                    />
-            </div>
-
-            {/* Modal */}
-            <CreateRoleModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onCreate={handleCreateRole}
-            />
-
-            <UpdateRoleModal
-                isOpen={isUpdateModalOpen}
-                onClose={() => setIsUpdateModalOpen(false)}
-                onUpdate={handleUpdateRole}
-                initialData={selectedRole}
-            />
-        </div>
+        </ProtectedRoute>
     )
 };
 

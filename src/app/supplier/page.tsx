@@ -7,6 +7,7 @@ import Header from "../(components)/Header";
 import CreateSupplierModal from "./CreateSupplierModal";
 import UpdateSupplierModal from "./UpdateSupplierModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import ProtectedRoute from "../(components)/ProtectedRoute";
 
 type SupplierFormData = {
     supplierId: string;
@@ -70,56 +71,58 @@ const Supplier = () => {
     };
 
     return (
-        <div className="mx-auto pb-5 w-full">
+        <ProtectedRoute>
+            <div className="mx-auto pb-5 w-full">
 
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <Header name="Supplier"/>
-                <button 
-                    className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
-                    Create Supplier
-                </button>
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
+                    <Header name="Supplier"/>
+                    <button 
+                        className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
+                        Create Supplier
+                    </button>
+                </div>
+
+                {/* Supplier List */}
+                <div className="flex flex-col">
+                        <DataGrid 
+                            rows={supplier} 
+                            columns={columns} 
+                            getRowId={(row) => row.supplierId} 
+                            checkboxSelection
+                            initialState={{
+                                sorting: {
+                                    sortModel: [{ field: 'supplierId', sort: 'asc' }],
+                                }
+                            }}
+                            className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
+                            [&_.MuiTablePagination-root]:!text-gray-700
+                            [&_.MuiButtonBase-root]:!text-gray-700
+                            [&_.MuiDataGrid-columnHeader]:bg-white
+                            [&_.MuiDataGrid-filler]:bg-white
+                            [&_.MuiSvgIcon-root]:!text-gray-700
+                            "
+                        />
+                </div>
+
+                {/* Modal */}
+                <CreateSupplierModal 
+                    isOpen={isModalOpen} 
+                    onClose={() => setIsModalOpen(false)} 
+                    onCreate={handleCreateSupplier}
+                />
+
+                <UpdateSupplierModal
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    onUpdate={handleUpdateSupplier}
+                    initialData={selectedSupplier}
+                />
             </div>
-
-            {/* Supplier List */}
-            <div className="flex flex-col">
-                    <DataGrid 
-                        rows={supplier} 
-                        columns={columns} 
-                        getRowId={(row) => row.supplierId} 
-                        checkboxSelection
-                        initialState={{
-                            sorting: {
-                                sortModel: [{ field: 'supplierId', sort: 'asc' }],
-                            }
-                        }}
-                        className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
-                        [&_.MuiTablePagination-root]:!text-gray-700
-                        [&_.MuiButtonBase-root]:!text-gray-700
-                        [&_.MuiDataGrid-columnHeader]:bg-white
-                        [&_.MuiDataGrid-filler]:bg-white
-                        [&_.MuiSvgIcon-root]:!text-gray-700
-                        "
-                    />
-            </div>
-
-            {/* Modal */}
-            <CreateSupplierModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                onCreate={handleCreateSupplier}
-            />
-
-            <UpdateSupplierModal
-                isOpen={isUpdateModalOpen}
-                onClose={() => setIsUpdateModalOpen(false)}
-                onUpdate={handleUpdateSupplier}
-                initialData={selectedSupplier}
-            />
-        </div>
+        </ProtectedRoute>
     )
 };
 

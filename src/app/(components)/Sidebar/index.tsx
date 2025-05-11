@@ -2,16 +2,39 @@
 
 import { useAppDispatch, useAppSelector } from '@/app/redux'
 import { setIsSidebarCollapsed } from '@/state'
-import { Archive, CircleDollarSign, Clipboard, Layout, LucideIcon, Menu, SlidersHorizontal, User } from 'lucide-react'
+import { CircleDollarSign, Clipboard, Layout, LucideIcon, Menu, SlidersHorizontal, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
+import { jwtDecode } from 'jwt-decode'
 
 interface SidebarLinkProps {
     href: string;
     icon: LucideIcon;
     label: string;
     isCollapsed: boolean;
+}
+
+interface TokenPayload {
+    userId: string;
+    name: string;
+    email: string;
+    roleId: number;
+    statusId: number;
+}
+
+let roleId: number | null = null;
+
+if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
+    if (token) {
+        try {
+            const decoded = jwtDecode<TokenPayload>(token);
+            roleId = decoded.roleId;
+        } catch (error) {
+            console.error("Error decoding token:", error);
+        }
+    }
 }
 
 const SidebarLink = ({
@@ -68,12 +91,6 @@ const Sidebar = () => {
                     isCollapsed={isSidebarCollapsed} 
                 />
                 <SidebarLink  
-                    href='/inventory' 
-                    icon={Archive} 
-                    label='Inventario' 
-                    isCollapsed={isSidebarCollapsed} 
-                />
-                <SidebarLink  
                     href='/products' 
                     icon={Clipboard} 
                     label='Productos' 
@@ -85,12 +102,14 @@ const Sidebar = () => {
                     label='Clients' 
                     isCollapsed={isSidebarCollapsed} 
                 />
-                <SidebarLink  
-                    href='/users' 
-                    icon={User} 
-                    label='Users' 
-                    isCollapsed={isSidebarCollapsed} 
-                />
+                {roleId === 1 && (
+                    <SidebarLink  
+                        href='/users' 
+                        icon={User} 
+                        label='Users' 
+                        isCollapsed={isSidebarCollapsed} 
+                    />
+                )}
                 <SidebarLink  
                     href='/settings' 
                     icon={SlidersHorizontal} 

@@ -1,43 +1,49 @@
 "use client"
 
-import { useCreateStatusMutation, useGetStatusQuery, useUpdateStatusMutation } from "@/state/api";
+import { useCreateUserMutation, useGetUserQuery, useUpdateUserMutation } from "@/state/api";
 import { PlusCircleIcon } from "lucide-react";
 import { useState } from "react"
 import Header from "../(components)/Header";
-import CreateStatusModal from "./CreateStatusModal";
-import UpdateStatusModal from "./UpdateStatusModal";
+import CreateUserModal from "./CreateUserModal";
+import UpdateUserModal from "./UpdateUserModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import ProtectedRoute from "../(components)/ProtectedRoute";
 import Unauthorized from "../(components)/Unauthorized";
 import { useUserRole } from "@/hooks/useUserRole";
 
-type StatusFormData = {
-    statusId: number;
+type UserFormData = {
+    userId: string;
     name: string;
-    description: string;
+    email: string;
+    password: string;
+    roleId: number;
+    statusId: number;
 };
 
-const Status = () => {
+const Users = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { data: status, isLoading, isError } = useGetStatusQuery();
-    const [createStatus] = useCreateStatusMutation();
+    const { data: user, isLoading, isError } = useGetUserQuery();
+    const [createUser] = useCreateUserMutation();
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState<StatusFormData | null>(null);
-    const [updateStatus] = useUpdateStatusMutation();
+    const [selectedUser, setSelectedUser] = useState<UserFormData | null>(null);
+    const [updateUser] = useUpdateUserMutation();
     const roleId = useUserRole();
 
-    const handleCreateStatus = async (statusData: StatusFormData) => {
-        await createStatus(statusData);
+    const handleCreateUser = async (userData: UserFormData) => {
+        await createUser(userData);
     }
 
-    const handleUpdateStatus = async (data: StatusFormData) => {
-        await updateStatus(data);
+    const handleUpdateUser = async (data: UserFormData) => {
+        await updateUser(data);
     };
 
     const columns: GridColDef[] = [
-        { field: "statusId", headerName: "ID", width: 90, sortable: true },
-        { field: "name", headerName: "Status Name", width: 200 },
-        { field: "description", headerName: "Status Description", width: 200 },
+        { field: "userId", headerName: "ID", width: 90, sortable: true },
+        { field: "name", headerName: "User Name", width: 200 },
+        { field: "email", headerName: "Email", width: 200 },
+        { field: "password", headerName: "Password", width: 200 },
+        { field: "roleId", headerName: "Role", width: 200 },
+        { field: "statusId", headerName: "Status", width: 200 },
         {
             field: "actions",
             headerName: "Actions",
@@ -47,7 +53,7 @@ const Status = () => {
                 <button
                     className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
                     onClick={() => {
-                        setSelectedStatus(params.row);
+                        setSelectedUser(params.row);
                         setIsUpdateModalOpen(true);
                     }}
                 >
@@ -61,10 +67,10 @@ const Status = () => {
         return <div className="py-4">Loading...</div>
     };
 
-    if (isError || !status) {
+    if (isError || !user) {
         return (
             <div className="text-center text-red-500 py-4">
-                Failed to fetch Status
+                Failed to fetch User
             </div>
         );
     };
@@ -78,27 +84,26 @@ const Status = () => {
 
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                    <Header name="Status"/>
+                    <Header name="User"/>
                     <button 
                         className="flex items-center bg-purple-500 hover:bg-purple-700 text-gray-200 font-bold py-2 px-4 rounded" 
                         onClick={() => setIsModalOpen(true)}
                     >
                         <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200"/>
-                        Create Status
+                        Create User
                     </button>
                 </div>
 
-                {/* Status List */}
+                {/* User List */}
                 <div className="flex flex-col">
-                        <Header name="Status"/>
                         <DataGrid 
-                            rows={status} 
+                            rows={user} 
                             columns={columns} 
-                            getRowId={(row) => row.statusId} 
+                            getRowId={(row) => row.userId} 
                             checkboxSelection
                             initialState={{
                                 sorting: {
-                                    sortModel: [{ field: 'statusId', sort: 'asc' }],
+                                    sortModel: [{ field: 'name', sort: 'asc' }],
                                 }
                             }}
                             className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700 
@@ -112,21 +117,21 @@ const Status = () => {
                 </div>
 
                 {/* Modal */}
-                <CreateStatusModal 
+                <CreateUserModal 
                     isOpen={isModalOpen} 
                     onClose={() => setIsModalOpen(false)} 
-                    onCreate={handleCreateStatus}
+                    onCreate={handleCreateUser}
                 />
 
-                <UpdateStatusModal
+                <UpdateUserModal
                     isOpen={isUpdateModalOpen}
                     onClose={() => setIsUpdateModalOpen(false)}
-                    onUpdate={handleUpdateStatus}
-                    initialData={selectedStatus}
+                    onUpdate={handleUpdateUser}
+                    initialData={selectedUser}
                 />
             </div>
         </ProtectedRoute>
     )
 };
 
-export default Status
+export default Users
