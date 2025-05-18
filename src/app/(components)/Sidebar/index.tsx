@@ -2,39 +2,16 @@
 
 import { useAppDispatch, useAppSelector } from '@/app/redux'
 import { setIsSidebarCollapsed } from '@/state'
-import { CircleDollarSign, Clipboard, Layout, LucideIcon, Menu, SlidersHorizontal, User } from 'lucide-react'
+import { CircleDollarSign,  ClipboardList, Layout, LucideIcon, Menu, Package, Settings,Tag, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
-import { jwtDecode } from 'jwt-decode'
 
 interface SidebarLinkProps {
     href: string;
     icon: LucideIcon;
     label: string;
     isCollapsed: boolean;
-}
-
-interface TokenPayload {
-    userId: string;
-    name: string;
-    email: string;
-    roleId: number;
-    statusId: number;
-}
-
-let roleId: number | null = null;
-
-if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
-    if (token) {
-        try {
-            const decoded = jwtDecode<TokenPayload>(token);
-            roleId = decoded.roleId;
-        } catch (error) {
-            console.error("Error decoding token:", error);
-        }
-    }
 }
 
 const SidebarLink = ({
@@ -87,13 +64,13 @@ const Sidebar = () => {
                 <SidebarLink  
                     href='/finances' 
                     icon={CircleDollarSign} 
-                    label='Finanzas' 
+                    label='Finances' 
                     isCollapsed={isSidebarCollapsed} 
                 />
                 <SidebarLink  
                     href='/products' 
-                    icon={Clipboard} 
-                    label='Productos' 
+                    icon={ClipboardList} 
+                    label='Products' 
                     isCollapsed={isSidebarCollapsed} 
                 />
                 <SidebarLink  
@@ -102,30 +79,22 @@ const Sidebar = () => {
                     label='Clients' 
                     isCollapsed={isSidebarCollapsed} 
                 />
-                {roleId === 1 && (
-                    <SidebarLink  
-                        href='/users' 
-                        icon={User} 
-                        label='Users' 
-                        isCollapsed={isSidebarCollapsed} 
-                    />
-                )}
-                <SidebarLink  
-                    href='/settings' 
-                    icon={SlidersHorizontal} 
-                    label='Configuracion' 
-                    isCollapsed={isSidebarCollapsed} 
-                />
                 <SidebarLink  
                     href='/supplier' 
-                    icon={SlidersHorizontal} 
+                    icon={Package} 
                     label='Suppliers' 
                     isCollapsed={isSidebarCollapsed} 
                 />
                 <SidebarLink  
                     href='/category' 
-                    icon={SlidersHorizontal} 
-                    label='Category' 
+                    icon={Tag} 
+                    label='Categories' 
+                    isCollapsed={isSidebarCollapsed} 
+                />
+                <SidebarLink  
+                    href='/settings' 
+                    icon={Settings} 
+                    label='Settings' 
                     isCollapsed={isSidebarCollapsed} 
                 />
                 
