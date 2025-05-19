@@ -99,9 +99,11 @@ const Sale = () => {
 
     if (isError || !sales) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Sales
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Sales
+                </div>
+            </ProtectedRoute>
         );
     }
 

@@ -63,9 +63,11 @@ const Status = () => {
 
     if (isError || !status) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Status
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Status
+                </div>
+            </ProtectedRoute>
         );
     };
 

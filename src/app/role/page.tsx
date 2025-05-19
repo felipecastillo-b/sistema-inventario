@@ -63,9 +63,11 @@ const Role = () => {
 
     if (isError || !role) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Role
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Role
+                </div>
+            </ProtectedRoute>
         );
     };
 

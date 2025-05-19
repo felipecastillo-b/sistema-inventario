@@ -97,9 +97,11 @@ const Expense = () => {
 
     if (isError || !expenses) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Expenses
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Expenses
+                </div>
+            </ProtectedRoute>
         );
     }
 

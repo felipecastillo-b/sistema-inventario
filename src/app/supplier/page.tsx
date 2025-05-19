@@ -64,9 +64,11 @@ const Supplier = () => {
 
     if (isError || !supplier) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Supplier
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Supplier
+                </div>
+            </ProtectedRoute>
         );
     };
 

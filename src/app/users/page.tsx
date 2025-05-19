@@ -69,9 +69,11 @@ const Users = () => {
 
     if (isError || !user) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch User
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch User
+                </div>
+            </ProtectedRoute>
         );
     };
 

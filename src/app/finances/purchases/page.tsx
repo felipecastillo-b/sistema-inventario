@@ -98,9 +98,11 @@ const Purchase = () => {
 
     if (isError || !purchases) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Purchases
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Purchases
+                </div>
+            </ProtectedRoute>
         );
     }
 

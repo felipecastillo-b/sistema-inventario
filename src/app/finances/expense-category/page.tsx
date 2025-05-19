@@ -96,9 +96,11 @@ const ExpenseByCategory = () => {
 
     if (isError || !expenseByCategories) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch ExpenseByCategory
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch ExpenseByCategory
+                </div>
+            </ProtectedRoute>
         );
     }
 

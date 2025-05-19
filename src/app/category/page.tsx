@@ -60,9 +60,11 @@ const Category = () => {
 
     if (isError || !category) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Category
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Category
+                </div>
+            </ProtectedRoute>
         );
     };
 

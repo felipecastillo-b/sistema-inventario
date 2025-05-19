@@ -51,9 +51,11 @@ const Product = () => {
 
     if (isError || !products) {
         return (
-            <div className="text-center text-red-500 py-4">
-                Failed to fetch Products
-            </div>
+            <ProtectedRoute>
+                <div className="text-center text-red-500 py-4">
+                    Failed to fetch Products
+                </div>
+            </ProtectedRoute>
         );
     }
 
