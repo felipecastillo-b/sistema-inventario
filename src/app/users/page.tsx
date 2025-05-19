@@ -67,6 +67,9 @@ const Users = () => {
         return <div className="py-4">Loading...</div>
     };
 
+    if (roleId === null) return <ProtectedRoute>Loading...</ProtectedRoute>;
+    if (roleId !== 1) return <Unauthorized />;
+
     if (isError || !user) {
         return (
             <ProtectedRoute>
@@ -77,8 +80,6 @@ const Users = () => {
         );
     };
 
-    if (roleId === null) return <div className="py-4">Cargando...</div>;
-    if (roleId !== 1) return <Unauthorized />;
 
     return (
         <ProtectedRoute>
