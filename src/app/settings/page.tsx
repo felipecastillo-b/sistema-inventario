@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import Header from "@/app/(components)/Header";
+import { useRouter } from "next/navigation";
 import ProtectedRoute from "../(components)/ProtectedRoute";
+import { useUserRole } from "@/hooks/useUserRole";
 
 type UserSetting = {
     label: string;
@@ -18,6 +20,8 @@ const mockSettings: UserSetting[] = [
 
 const Settings = () => {
     const [userSettings, setUserSettings] = useState<UserSetting[]>(mockSettings);
+    const router = useRouter();
+    const roleId = useUserRole();
 
     const handleToggleChange = (index: number) => {
         const settingsCopy = [...userSettings];
@@ -82,6 +86,34 @@ const Settings = () => {
                     </table>
                 </div>
             </div>
+            {roleId === 1 && (
+                <>
+                    <br />
+                    <div className="flex justify-between items-center mb-6">
+                        <Header name="Admin Settings" />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* User Card */}
+                        <div className="border border-blue-500 shadow rounded-md p-4 bg-white">
+                            <div className="flex flex-col space-y-2">
+                                <h3 className="text-lg font-semibold text-gray-800 text-center">User Control Panel</h3>
+                                <p className="text-sm text-gray-600 text-center">View Users and manage Users.</p>
+                                <button
+                                    className="mt-4 bg-purple-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                                >
+                                    Add User Soon...
+                                </button>
+                                <button
+                                    className="mt-4 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                                    onClick={() => router.push('/users')}
+                                >
+                                    Go Users Control Panel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
         </ProtectedRoute>
     );
 };
