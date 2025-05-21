@@ -2,7 +2,12 @@ import prisma from "../configs/prisma.config";
 import bcrypt from 'bcryptjs';
 
 export const getUserService = async () => {
-    return await prisma.users.findMany();
+    return await prisma.users.findMany({
+        include: {
+            role: true,
+            status: true,
+        }
+    });
 };
 
 export const createUserService = async (userId: string, name: string, email: string, password: string, roleId: number, statusId: number) => {
