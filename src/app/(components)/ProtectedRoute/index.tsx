@@ -2,9 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode"
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
+}
+
+interface JwtPayload {
+    exp: number; // tiempo en segundos desde epoch
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
@@ -16,8 +21,24 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
         if (!token) {
             router.push("/auth/login");
-        } else {
+            return;
+        }
+
+        try {
+            const decoded = jwtDecode<JwtPayload>(token);
+            const currentTime = Date.now() / 1000; // en segundos
+
+            if (decoded.exp < currentTime) {
+                localStorage.removeItem("token");
+                router.push("/auth/login");
+                return;
+            }
+
             setLoading(false);
+        } catch (error) {
+            console.error("Token inválido:", error);
+            localStorage.removeItem("token");
+            router.push("/auth/login");
         }
     }, [router]);
 
