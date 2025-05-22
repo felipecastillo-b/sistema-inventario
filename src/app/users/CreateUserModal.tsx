@@ -36,6 +36,10 @@ const CreateUserModal = ({
     
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!isValidEmail(formData.email)) {
+            alert("Email invalid.");
+            return;
+        }
         onCreate(formData);
         onClose();
     };
@@ -74,6 +78,9 @@ const CreateUserModal = ({
 
     const labelCssStyles = "block text-sm font-medium text-gray-700";
     const inputCssStyles = "block w-full mb-2 p-2 border-gray-500 border-2 rounded-md text-white";
+    const isValidEmail = (email: string) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
 
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20">
@@ -111,7 +118,7 @@ const CreateUserModal = ({
                         Password
                     </label>
                     <input 
-                        type="text" 
+                        type="password" 
                         name="password" 
                         placeholder="Password" 
                         onChange={handleChange}
