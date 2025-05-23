@@ -1,54 +1,59 @@
-/*import prisma from "../configs/prisma.config";
+import prisma from "../configs/prisma.config";
 
-export const getPopularProducts = async () => {
-    return await prisma.products.findMany({
-        take: 15,
+export const getSummaryService = async () => {
+    const [salesSummary, purchaseSummary, expenseSummary] = await Promise.all([
+        prisma.sales.aggregate({
+            _sum: { totalAmount: true }
+        }),
+        prisma.purchases.aggregate({
+            _sum: { totalCost: true }
+        }),
+        prisma.expenses.aggregate({
+            _sum: { amount: true }
+        }),
+    ])
+
+    const topProducts = await prisma.sales.groupBy({
+        by: ['productId'],
+        _sum: { totalAmount: true },
         orderBy: {
-            stockQuantity: "desc",
+            _sum: { totalAmount: 'desc' }
         },
-    });
-};
+        take: 5
+    })
 
-export const getSalesSummary = async () => {
-    return await prisma.salesSummary.findMany({
-        take: 5,
-        orderBy: {
-            date: "desc",
-        },
-    });
-};
-
-export const getPurchaseSummary = async () => {
-    return await prisma.purchaseSummary.findMany({
-        take: 5,
-        orderBy: {
-            date: "desc",
-        },
-    });
-};
-
-export const getExpenseSummary = async () => {
-    return await prisma.expenseSummary.findMany({
-        take: 5,
-        orderBy: {
-            date: "desc",
-        },
-    });
-};
-
-export const getExpenseByCategorySummaryRaw = async () => {
-    return await prisma.expenseByCategory.findMany({
-        take: 5,
-        orderBy: {
-            date: "desc",
-        },
-    });
-};
-
-export const getExpenseByCategory = async () => {
-    const expenses = await getExpenseByCategorySummaryRaw();
-    return expenses.map((item) => ({
-        ...item,
-        amount: item.amount.toString(),
+    const productDetails = await Promise.all(topProducts.map(async (p) => {
+        const product = await prisma.products.findUnique({
+            where: { productId: p.productId },
+            select: { name: true, image_url: true }
+        })
+        return {
+            productId: p.productId,
+            name: product?.name ?? 'Unknown',
+            image_url: product?.image_url,
+            totalSold: p._sum.totalAmount
+        }
     }))
-}*/
+
+    const lowStock = await prisma.products.findMany({
+        where: {
+            stockQuantity: {
+                lt: prisma.products.fields.stockMinimum
+            }
+        },
+        select: {
+            productId: true,
+            name: true,
+            stockQuantity: true,
+            stockMinimum: true
+        }
+    })
+
+    return {
+        sales: salesSummary._sum.totalAmount ?? 0,
+        purchases: purchaseSummary._sum.totalCost ?? 0,
+        expenses: expenseSummary._sum.amount ?? 0,
+        topProducts: productDetails,
+        lowStock
+    }
+};

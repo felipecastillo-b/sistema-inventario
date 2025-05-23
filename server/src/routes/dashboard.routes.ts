@@ -1,8 +1,9 @@
-/*import { Router } from "express";
-import { getDashboardMetrics } from "../controllers/dashboard.controller";
+import { Router } from "express";
+import { getSummary } from "../controllers/dashboard.controller";
+import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.get('/', getDashboardMetrics);
+router.get('/', authenticate, getSummary);
 
-export default router;*/
+export default router;
