@@ -179,6 +179,28 @@ export interface NewUser {
     statusId: number,
 }
 
+export interface TopProduct {
+    productId: string,
+    name: string,
+    image_url: string | null
+    totalSold: number
+}
+
+export interface LowStockProduct {
+    productId: string,
+    name: string,
+    stockQuantity: number,
+    stockMinimum: number
+}
+
+export interface DashboardSummary {
+    sales: number,
+    purchases: number,
+    expenses: number,
+    topProducts: TopProduct[],
+    lowStock: LowStockProduct[]
+}
+
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
         prepareHeaders: (headers) => {
@@ -190,13 +212,13 @@ export const api = createApi({
         }
     }),
     reducerPath: 'api',
-    tagTypes: ["DashboardMetrics", "Products", "Clients", "Status", "Supplier", "Category", "Role", "User", "Purchase", "Sale", "ExpenseByCategory", "Expense"],
+    tagTypes: ["DashboardSummary", "Products", "Clients", "Status", "Supplier", "Category", "Role", "User", "Purchase", "Sale", "ExpenseByCategory", "Expense"],
     endpoints: (build) => ({
         // Dashboard
-//        getDashboardMetrics: build.query<DashboardMetrics, void>({
-//            query: () => "/dashboard",
-//            providesTags: ["DashboardMetrics"]
-//        }),
+        getDashboardSummary: build.query<DashboardSummary, void>({
+            query: () => "/dashboard",
+            providesTags: ["DashboardSummary"]
+        }),
         // Products
         getProducts: build.query<Product[], string | void>({
             query: (search) => ({
@@ -410,7 +432,7 @@ export const api = createApi({
 })
 
 export const { 
-    //useGetDashboardMetricsQuery, 
+    useGetDashboardSummaryQuery, 
     useGetProductsQuery, 
     useCreateProductMutation,
     useUpdateProductMutation,
