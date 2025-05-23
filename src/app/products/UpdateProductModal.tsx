@@ -151,6 +151,16 @@ const UpdateProductModal = ({ isOpen, onClose, onUpdate, initialData }: UpdatePr
                         ))}
                     </select>
 
+                    <label htmlFor="productStockMinimum" className={labelStyles}>Stock Minimum</label>
+                    <input
+                        type="text"
+                        name="stockMinimum"
+                        value={formData.stockMinimum}
+                        onChange={handleChange}
+                        className={inputStyles}
+                        required
+                    />
+
                     <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Update</button>
                     <button type="button" className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700" onClick={onClose}>Cancel</button>
                 </form>
