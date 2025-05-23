@@ -197,6 +197,11 @@ export interface DashboardSummary {
     sales: number,
     purchases: number,
     expenses: number,
+    netProfit: number,
+    profitMargin: number,
+    activeClients: number,
+    lowStockCount: number,
+    monthlySales: number,
     topProducts: TopProduct[],
     lowStock: LowStockProduct[]
 }
