@@ -49,11 +49,44 @@ export const getSummaryService = async () => {
         }
     })
 
+    const activeClients = await prisma.clients.count({
+        where: {
+            sales: {
+                some: {}
+            }
+        }
+    })
+
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const monthlySales = await prisma.sales.aggregate({
+        _sum: { totalAmount: true },
+        where: {
+            timestamp: {
+                gte: startOfMonth
+            }
+        }
+    })
+
+    const totalSales = salesSummary._sum.totalAmount ?? 0;
+    const totalPurchases = purchaseSummary._sum.totalCost ?? 0;
+    const totalExpenses = expenseSummary._sum.amount ?? 0;
+    const netProfit = totalSales - totalPurchases - totalExpenses;
+    const profitMargin = totalSales ? (netProfit / totalSales) * 100 : 0;
+    const lowStockCount = lowStock.length;
+
     return {
-        sales: salesSummary._sum.totalAmount ?? 0,
-        purchases: purchaseSummary._sum.totalCost ?? 0,
-        expenses: expenseSummary._sum.amount ?? 0,
+        sales: totalSales,
+        purchases: totalPurchases,
+        expenses: totalExpenses,
+        netProfit: netProfit,
+        profitMargin,
+        activeClients,
+        monthlySales: monthlySales._sum.totalAmount ?? 0,
         topProducts: productDetails,
-        lowStock
+        lowStock,
+        lowStockCount
     }
 };
