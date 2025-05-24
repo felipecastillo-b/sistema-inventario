@@ -22,7 +22,8 @@ export const createProductService = async (
     supplierId: string,
     statusId: number,
     name: string,
-    price: number
+    price: number,
+    image_url?: string,
 ) => {
     // Verificar que las relaciones existan antes de crear
     const [category, supplier, status] = await Promise.all([
@@ -46,6 +47,7 @@ export const createProductService = async (
             rating: 0, 
             stockQuantity: 0, 
             stockMinimum: 0,
+            image_url,
         },
         include: {
             category: true,
@@ -64,7 +66,8 @@ export const updateProductService = async (
     price: number,
     rating: number,
     stockQuantity: number,
-    stockMinimum: number
+    stockMinimum: number,
+    image_url?: string
 ) => {
     // Verifica que el producto exista
     const product = await prisma.products.findUnique({
@@ -95,6 +98,7 @@ export const updateProductService = async (
             categoryId,
             supplierId,
             statusId,
+            image_url: image_url !== undefined ? image_url : undefined, // Solo actualiza si se proporciona
         },
         include: {
             category: true,
