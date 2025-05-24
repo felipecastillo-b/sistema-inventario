@@ -1,3 +1,4 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/felipecastillo-b/sistema-inventario)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/felipecastillo-b/sistema-inventario/releases)
 
