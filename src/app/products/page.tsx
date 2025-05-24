@@ -7,7 +7,6 @@ import { useState } from "react";
 import Header from "../(components)/Header";
 import CreateProductModal from "./CreateProductModal";
 import UpdateProductModal from "./UpdateProductModal";
-import Rating from "../(components)/Rating";
 import ProtectedRoute from "../(components)/ProtectedRoute";
 
 type ProductFormData = {
@@ -20,6 +19,7 @@ type ProductFormData = {
     rating: number;
     stockQuantity: number;
     stockMinimum: number;
+    image_url?: string;
 };
 
 const Product = () => {
@@ -91,28 +91,37 @@ const Product = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sortedProducts.map((product: any) => (
                         <div key={product.productId} className="border shadow rounded-md p-4 bg-white">
-                            <div className="flex flex-col space-y-2">
-                                <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-                                <p className="text-sm text-gray-600">Category: {product.category?.name ?? "N/A"}</p>
-                                <p className="text-sm text-gray-600">Supplier: {product.supplier?.name ?? "N/A"}</p>
-                                <p className="text-sm text-gray-600">Status: {product.status?.name ?? "N/A"}</p>
-                                <p className="text-sm text-gray-800 font-medium">Price: ${product.price.toFixed(2)}</p>
-                                <p className="text-sm text-gray-600">Stock: {product.stockQuantity}</p>
-                                <p className="text-sm text-gray-600">Minimum Stock: {product.stockMinimum}</p>
-                                {product.rating && (
-                                    <div className="mt-2">
-                                        <Rating rating={product.rating} />
+                            <div className="flex flex-col md:flex-row gap-4">
+                                {/* Text Content */}
+                                <div className="flex-1">
+                                    <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+                                    <p className="text-sm text-gray-600">Category: {product.category?.name ?? "N/A"}</p>
+                                    <p className="text-sm text-gray-600">Supplier: {product.supplier?.name ?? "N/A"}</p>
+                                    <p className="text-sm text-gray-600">Status: {product.status?.name ?? "N/A"}</p>
+                                    <p className="text-sm text-gray-800 font-medium">Price: ${product.price.toFixed(2)}</p>
+                                    <p className="text-sm text-gray-600">Stock: {product.stockQuantity}</p>
+                                    <p className="text-sm text-gray-600">Minimum Stock: {product.stockMinimum}</p>
+                                    <button
+                                        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                                        onClick={() => {
+                                            setSelectedProduct(product);
+                                            setIsUpdateModalOpen(true);
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                </div>
+
+                                {/* Image */}
+                                {product.image_url && (
+                                    <div className="w-full md:w-1/3 flex items-center justify-center">
+                                        <img
+                                            src={product.image_url}
+                                            alt={product.name}
+                                            className="w-full h-32 object-contain rounded-md"
+                                        />
                                     </div>
                                 )}
-                                <button
-                                    className="mt-4 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                                    onClick={() => {
-                                        setSelectedProduct(product);
-                                        setIsUpdateModalOpen(true);
-                                    }}
-                                >
-                                    Edit
-                                </button>
                             </div>
                         </div>
                     ))}

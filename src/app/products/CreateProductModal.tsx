@@ -13,12 +13,13 @@ type ProductFormData = {
     rating: number;
     stockQuantity: number;
     stockMinimum: number;
+    image_url?: string;
 };
 
 type CreateProductModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    onCreate: (formData: ProductFormData) => void;
+    onCreate: (formData: FormData) => void;
 };
 
 const CreateProductModal = ({
@@ -29,7 +30,8 @@ const CreateProductModal = ({
     const { data: categories = [] } = useGetCategoryQuery();
     const { data: suppliers = [] } = useGetSupplierQuery();
     const { data: statuses = [] } = useGetStatusQuery();
-    
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
     const [formData, setFormData] = useState<ProductFormData>({
         productId: v4(),
         categoryId: categories[0]?.categoryId || "",
@@ -55,18 +57,29 @@ const CreateProductModal = ({
                 stockQuantity: 0,
                 stockMinimum: 0,
             });
+            setImageFile(null); // Resetear la imagen al abrir el modal
         }
     }, [isOpen, categories, suppliers, statuses]);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         if (!formData.categoryId || !formData.supplierId || formData.statusId === 0) {
             alert('Please fill all required fields');
             return;
         }
 
-        onCreate(formData);
+        const formDataToSend = new FormData();
+
+        Object.entries(formData).forEach(([key, value]) => {
+            formDataToSend.append(key, value.toString());
+        });
+
+        if (imageFile) {
+            formDataToSend.append('image', imageFile);
+        }
+
+        onCreate(formDataToSend);
         onClose();
     };
 
@@ -74,11 +87,11 @@ const CreateProductModal = ({
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: ['statusId', 'stockQuantity', 'stockMinimum'].includes(name) 
-                ? Number(value) 
+            [name]: ['statusId', 'stockQuantity', 'stockMinimum'].includes(name)
+                ? Number(value)
                 : ['price', 'rating'].includes(name)
-                ? parseFloat(value) || 0
-                : value
+                    ? parseFloat(value) || 0
+                    : value
         }));
     };
 
@@ -86,8 +99,8 @@ const CreateProductModal = ({
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: ['statusId', 'stockQuantity', 'stockMinimum'].includes(name) 
-                ? Number(value) 
+            [name]: ['statusId', 'stockQuantity', 'stockMinimum'].includes(name)
+                ? Number(value)
                 : value
         }));
     };
@@ -101,7 +114,7 @@ const CreateProductModal = ({
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                 <Header name="Create New Product" />
-                <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+                <form onSubmit={handleSubmit} className="mt-5 space-y-4" encType="multipart/form-data">
                     {/* Product Name */}
                     <div>
                         <label htmlFor="name" className={labelStyles}>
@@ -202,6 +215,22 @@ const CreateProductModal = ({
                                 ))}
                         </select>
                     </div>
+
+                    <label htmlFor="image" className={labelStyles}>
+                        Upload Image
+                    </label>
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                                setImageFile(e.target.files[0]);
+                            }
+                        }}
+                        className={inputStyles}
+                    />
 
                     {/* Action Buttons */}
                     <div className="flex justify-end space-x-3 pt-4">
