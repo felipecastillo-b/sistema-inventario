@@ -1,38 +1,146 @@
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/felipecastillo-b/sistema-inventario)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/felipecastillo-b/sistema-inventario/releases)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Overview
+
+**Sistema Inventario/Iventory System** is a comprehensive inventory management system designed to help businesses:
+
+- Track products and stock levels
+
+- Manage client information
+
+- Monitor financial transactions (sales, purchases, expenses)
+
+- Control user access with role-based permissions
+
+Built with modern technologies, the project despite being in a monorepo can easily be separated between **Frontend**, **Backend** and **Database**.
+
+## Technology Stack
+
+- **Frontend:** NextJS, React, Redux Toolkit, RTK Query, Tailwind CSS, Material UI, Recharts.
+
+- **Backend:** Express, NodeJS, Prisma ORM, JWT, cloudinary.
+
+- **Database:** PostgreSQL.
+
+## Project Architecture
+
+#### Frontend
+
+- **State Management:** Redux Toolkit + RTK Query.
+
+- **UI Components:** Modular structure with Tailwind CSS & MUI.
+
+- **Key Features:** 
+  - Dashboard with analytics
+  - Product/Client/Financial management
+  - Responsive design
+
+#### Backend
+
+- **API Routes:** RESTful endpoints for CRUD operations.
+
+- **Layered Architecture:**
+  - **Routes → Controllers → Services → Database**
+
+- **Authentication:** JWT.
+
+#### Database
+
+- **Entities:** Products, Clients, Sales, Purchases, Expenses, Users, Roles, etc.
+
+- **Relationships:** Schema with foreign keys.
+
+## Key Modules
+
+- **Product Management:** CRUD operations, stock tracking, category/supplier assignment.
+
+- **Client Management:** Customer records, contact details, sales history.
+
+- **Financial Tracking:** Sales, purchases, expenses, and category-wise reports.
+
+- **User Management:** Role-based access control (Admin, Staff, etc.).
+
+## Data Flow
+
+1. **UI Event** → RTK Query API call
+2. **Backend** → Controller → Service → Prisma ORM
+3. **Database** → Processes query → Returns data
+4. **Frontend** → Updates state → Renders changes
 
 ## Getting Started
 
-First, run the development server:
+#### Prerequisites
+
+- NodeJS **v18+**
+- PostgreSQL **v15+**
+
+#### Instalattion
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/felipecastillo-b/sistema-inventario.git  
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd sistema-inventario  
+npm install  
+cd server  
+npm install  
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables (.env files in root and server/).
 
-## Learn More
+```bash
+#Example .env in root folder
+NEXT_PUBLIC_API_BASE_URL="http://localhost:4000/"
+```
+```bash
+#Example .env in server/ folder
+DATABASE_URL="postgresql://user:password@localhost:5432/database"
+JWT_SECRET="your_jwt_secret"
+CLOUDINARY_CLOUD_NAME=name
+CLOUDINARY_API_KEY=api_key
+CLOUDINARY_API_SECRET=api_secret
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run migrations:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd server  
+npx prisma migrate dev  
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. Start the application:
 
-## Deploy on Vercel
+```bash
+#Dev Frontend
+npm run dev
+#Dev Backend in server/
+npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#Start Frontend
+npm run start
+#Start Backend in server/
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation ~Soon~
+
+- [~Frontend Components~](https://github.com/felipecastillo-b)
+- [~Backend Architecture~](https://github.com/felipecastillo-b)
+- [~Database Schema~](https://github.com/felipecastillo-b)
+
+## Contact
+
+#### For questions or contributions:
+
+- **Email:** <felipecastillo.snk@gmail.com> | <hardcode.contacto@gmail.com> 
+- **Issues:** [Github Issues](https://github.com/felipecastillo-b/sistema-inventario/issues)
+
+## License
+
+- **License:** [MIT](https://github.com/felipecastillo-b/sistema-inventario/blob/main/LICENSE.md)
